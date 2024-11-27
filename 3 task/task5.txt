@@ -1,0 +1,26 @@
+import requests
+from bs4 import BeautifulSoup
+
+def fetch_h1_from_website(url):
+    """
+    Извлекает заголовок <h1> с указанного веб-сайта.
+    :param url: str - URL веб-сайта
+    """
+    try:
+        response = requests.get(url, timeout=5)
+        
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            h1_tag = soup.find('h1')
+            if h1_tag:
+                print(f"Заголовок <h1>: {h1_tag.text.strip()}")
+            else:
+                print("Заголовок <h1> не найден на странице.")
+        else:
+            print(f"Не удалось получить содержимое страницы, статус: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"Произошла ошибка: {e}")
+
+url_to_check = "http://www.example.com"
+fetch_h1_from_website(url_to_check)

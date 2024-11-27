@@ -1,0 +1,50 @@
+import requests
+from bs4 import BeautifulSoup
+import random
+
+def scrape_allocine_popular_movies():
+    """
+    Скрейпинг популярных фильмов с AlloCiné и вывод 10 случайных фильмов с их названиями и годами выпуска.
+    """
+    url = "https://www.allocine.fr/film/meilleurs/"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36",
+    }
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        movies = []
+        
+        movie_items = soup.find_all('li', class_='mdl')
+        print(f"Найдено {len(movie_items)} фильмов на странице.")
+        
+        for movie in movie_items:
+            title_tag = movie.find('h2', class_='meta-title')
+            date_tag = movie.find('div', class_='meta-body-item meta-body-info')
+            
+            title = title_tag.text.strip() if title_tag else "Название не найдено"
+            year = date_tag.text.strip().split()[-1] if date_tag else "Год не найден"
+            
+            movies.append(f"{title} ({year})")
+        
+        num_movies_to_display = min(10, len(movies))
+        random_movies = random.sample(movies, num_movies_to_display)
+        
+        if movies:
+            print("Фильмы успешно найдены и извлечены. Вывод 10 случайных фильмов:")
+            for movie in random_movies:
+                print("--------------------------------------------")
+                print(movie)
+        else:
+            print("Фильмы не найдены.")
+            
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при загрузке данных: {e}")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+
+scrape_allocine_popular_movies()

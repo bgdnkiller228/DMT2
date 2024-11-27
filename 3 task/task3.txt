@@ -1,0 +1,25 @@
+import requests
+
+def fetch_website_details(url):
+    """
+    Получает и выводит информацию о сайте.
+    :param url: str - URL веб-сайта
+    """
+    try:
+        response = requests.get(url, timeout=5)
+        
+        print("Status Code:", response.status_code)
+        print("Headers:", response.headers)
+        print("URL:", response.url)
+        print("History:", response.history)
+        print("Encoding:", response.encoding)
+        print("Reason:", response.reason)
+        print("Cookies:", response.cookies)
+        print("Elapsed Time:", response.elapsed)
+        print("Request:", response.request)
+        print("Content (first 500 characters):", response.text[:500]) 
+    except requests.exceptions.RequestException as e:
+        print(f"Произошла ошибка: {e}")
+
+url_to_check = "https://python.org"
+fetch_website_details(url_to_check)

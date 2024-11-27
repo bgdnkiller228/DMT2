@@ -1,0 +1,25 @@
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+
+def fetch_all_headers(url):
+    """
+    Извлекает и выводит все теги заголовков (h1-h6) с указанной веб-страницы.
+    :param url: str - URL веб-страницы
+    """
+    try:
+        response = urlopen(url)
+        html_content = response.read()
+        soup = BeautifulSoup(html_content, 'html.parser')
+        headers = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+        
+        if headers:
+            print("Найденные заголовки:")
+            for header in headers:
+                print(f"{header.name}: {header.text.strip()}")
+        else:
+            print("Заголовки не найдены на странице.")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+
+url_to_check = "https://en.wikipedia.org/wiki/Main_Page"
+fetch_all_headers(url_to_check)

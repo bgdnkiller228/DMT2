@@ -1,0 +1,29 @@
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+
+def fetch_links(url):
+    """
+    Выгружает страницу и формирует список всех ссылок на странице.
+    :param url: str - URL веб-страницы
+    """
+    try:
+        response = urlopen(url)
+        html_content = response.read()
+        
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        links = soup.find_all('a', href=True)
+        
+        link_list = [link['href'] for link in links]
+        
+        print("Ссылки на странице:")
+        for link in link_list:
+            print(link)
+        
+        return link_list
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+        return []
+
+url_to_check = "https://en.wikipedia.org/wiki/Python"
+links = fetch_links(url_to_check)

@@ -1,0 +1,25 @@
+import requests
+
+def check_ssl_certificate(url):
+    """
+    Проверяет наличие SSL-сертификата у сайта.
+    :param url: str - URL веб-сайта
+    """
+    try:
+
+        response = requests.get(url, timeout=5)
+        if response.url.startswith("https://"):
+            print(f"Сайт {url} использует SSL-сертификат.")
+        else:
+            print(f"Сайт {url} не использует SSL-сертификат.")
+    except requests.exceptions.SSLError:
+        print(f"Ошибка SSL: Сайт {url} не имеет корректного SSL-сертификата.")
+    except requests.exceptions.ConnectionError:
+        print(f"Ошибка соединения: Не удалось подключиться к {url}.")
+    except requests.exceptions.RequestException as e:
+        print(f"Произошла ошибка: {e}")
+    else:
+        print(f"Статус HTTP: {response.status_code}")
+
+url_to_check = "https://ru.wikipedia.org/"
+check_ssl_certificate(url_to_check)

@@ -1,0 +1,22 @@
+import requests
+
+def fetch_robots_txt(url):
+    """
+    Выгружает и выводит содержимое файла robots.txt.
+    :param url: str - URL веб-сайта (основной домен)
+    """
+    try:
+        robots_url = f"{url}/robots.txt"
+        
+        response = requests.get(robots_url, timeout=5)
+        
+        if response.status_code == 200:
+            print("Содержимое файла robots.txt:")
+            print(response.text)
+        else:
+            print(f"Не удалось получить robots.txt, статус: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"Произошла ошибка: {e}")
+
+url_to_check = "https://en.wikipedia.org"
+fetch_robots_txt(url_to_check)

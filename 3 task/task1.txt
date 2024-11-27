@@ -1,0 +1,21 @@
+from urllib.request import urlopen
+from urllib.error import HTTPError
+from urllib.error import URLError
+
+def check_webpage(url):
+    """
+    Проверяет, доступна ли указанная веб-страница.
+    :param url: str - URL веб-страницы
+    """
+    try:
+        response = urlopen(url)
+        print(f"Страница найдена: {url}")
+    except HTTPError as e:
+        print(f"Ошибка HTTP: {e.code} - Страница не найдена или недоступна.")
+    except URLError as e:
+        print(f"Ошибка URL: {e.reason} - Проблемы с соединением.")
+    else:
+        print("Соединение успешно.")
+
+url_to_check = "https://ru.wikipedia.org/"
+check_webpage(url_to_check)
